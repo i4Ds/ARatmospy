@@ -1,8 +1,8 @@
 import numpy as np
 import numpy.random as ra
 import scipy.fftpack as sf
-import pyfits
-from create_multilayer_arbase import create_multilayer_arbase
+import astropy.io.fits as pyfits
+from .create_multilayer_arbase import create_multilayer_arbase
 
 class ArScreens(object):
     """
@@ -44,7 +44,7 @@ class ArScreens(object):
     def run(self, nframes, verbose=False):
         for j in range(nframes):
             if verbose:
-                print "time step", j
+                print("time step", j)
             self._phaseFT, screens = self.get_ar_atmos()
             for i, item in enumerate(screens):
                 self.screens[i].append(item)

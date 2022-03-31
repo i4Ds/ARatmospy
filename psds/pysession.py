@@ -2,15 +2,15 @@
 #%autoreload 2
 import numpy as np
 import pyfftw as pfw
-import pyfits as pf
+import astropy.io.fits as pf
 import matplotlib.pyplot as mp
 import os.path as op
 
-import check_ar_atmos as caa
-import generate_grids as gg
-import gen_avg_per_unb as gapu
-import depiston as dp
-import detilt as dt
+import ARatmospy.check_ar_atmos as caa
+import ARatmospy.generate_grids as gg
+import ARatmospy.gen_avg_per_unb as gapu
+import ARatmospy.depiston as dp
+import ARatmospy.detilt as dt
 
 perlen    = 1024.0
 alpha_mag = 0.99
@@ -70,9 +70,9 @@ timesteps = phdim[0]
 
 #phFT = np.zeros((timesteps,phx,phy), dtype=complex)
 if FTmmode == 'w+':
-    print "Creating FT mmap - this will take a while"
+    print("Creating FT mmap - this will take a while")
 else:
-    print "Reading FT dat files"
+    print("Reading FT dat files")
 phFT   = np.memmap(FTfile, dtype=complex, mode=FTmmode, shape=(timesteps,phx,phy))
 phapFT = np.memmap(apFTfile, dtype=complex, mode=FTmmode, shape=(timesteps,phx,phy))
 phdtFT = np.memmap(dtFTfile, dtype=complex, mode=FTmmode, shape=(timesteps,phx,phy))
@@ -80,7 +80,7 @@ phdtFT = np.memmap(dtFTfile, dtype=complex, mode=FTmmode, shape=(timesteps,phx,p
 # of the input array, i.e., a 2-dimensional FFT
 #phFT = np.fft.fft2(hdulist[0].data) / (phx*phy)
 if FTmmode == 'w+':
-    print "Computing FT"
+    print("Computing FT")
     for t in np.arange(timesteps):
         wf = hdulist[0].data[t,:,:]
         if fds:
@@ -88,7 +88,7 @@ if FTmmode == 'w+':
         else:
             phFT[t,:,:] = np.fft.fft2(wf) / (phx*phy)
 
-    print "Computing Apertured FT"
+    print("Computing Apertured FT")
     for t in np.arange(timesteps):
         wf = hdulist[0].data[t,:,:]
         if fds:
@@ -96,7 +96,7 @@ if FTmmode == 'w+':
         else:
             phapFT[t,:,:] = np.fft.fft2(wf*aperture) / (phx*phy)
 
-    print "Computing Apertured/Depistoned/Detilted FT"
+    print("Computing Apertured/Depistoned/Detilted FT")
     for t in np.arange(timesteps):
         wf = hdulist[0].data[t,:,:]
         if fds:
@@ -130,43 +130,40 @@ this_psd = np.memmap(PSDfile, dtype='float64', mode=PSDmmode, shape=(perlen,phx,
 appsd    = np.memmap(apPSDfile, dtype='float64', mode=PSDmmode, shape=(perlen,phx,phy))
 dtpsd    = np.memmap(dtPSDfile, dtype='float64', mode=PSDmmode, shape=(perlen,phx,phy))
 if PSDmmode == 'w+':
-    print "Doing PSD"
+    print("Doing PSD")
     for k in np.arange(phx):
         k20 = False
         if k%20 == 0:
-            print
             k20 = True 
-            print k, ":"
+            print("\n", k, ":")
             
         for l in np.arange(phy):
                 if k20 and l%20 == 0:
-                    print l,
+                    print(l,)
                 this_psd[:,k,l] = gapu.gen_avg_per_unb(phFT[:,k,l], perlen, meanrem=True)
-    print
-    print "Doing Apertured PSD"
+
+    print("\nDoing Apertured PSD")
     for k in np.arange(phx):
         k20 = False
         if k%20 == 0:
-            print
             k20 = True 
-            print k, ":"
+            print("\n", k, ":")
             
         for l in np.arange(phy):
                 if k20 and l%20 == 0:
-                    print l,
+                    print(l,)
                 appsd[:,k,l]    = gapu.gen_avg_per_unb(phapFT[:,k,l], perlen, meanrem=True)
-    print
-    print "Doing Apertured/Depistoned/Detilted PSD"
+
+    print("\nDoing Apertured/Depistoned/Detilted PSD")
     for k in np.arange(phx):
         k20 = False
         if k%20 == 0:
-            print
             k20 = True 
-            print k, ":"
+            print("\n", k, ":")
             
         for l in np.arange(phy):
                 if k20 and l%20 == 0:
-                    print l,
+                    print(l, )
                 dtpsd[:,k,l]    = gapu.gen_avg_per_unb(phdtFT[:,k,l], perlen, meanrem=True)
 
 varpsd   = np.sum(this_psd, axis=0)

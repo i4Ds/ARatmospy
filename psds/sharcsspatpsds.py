@@ -1,4 +1,4 @@
-import pyfits as pf
+import astropy.io.fits as pf
 import os
 
 import numpy as np
@@ -6,8 +6,8 @@ import matplotlib.pyplot as mp
 #import os.path as op
 
 #import check_ar_atmos as caa
-import generate_grids as gg
-import gen_avg_per_unb as gapu
+import ARatmospy.generate_grids as gg
+import ARatmospy.gen_avg_per_unb as gapu
 
 path    = '/Users/srikar/Data/Telemetry/sharcs'
 date    = '20141006'
@@ -47,10 +47,10 @@ psdfiles = [os.path.join(root, name)
 
 mode = raw_input('Enter to continue')             
 for fidx, fname in enumerate(psdfiles):
-    if mode is 'q':
+    if mode == 'q':
         break
     
-    print 'Analyzing ', fname
+    print('Analyzing ', fname)
     psd = np.memmap(fname, dtype='float64', mode='r', shape=(perlen,bign,bign))
     fnum = fname.split('_')[1].split('-')[0]
 

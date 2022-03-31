@@ -1,9 +1,9 @@
 import numpy as np
-import pyfits as pf
+import astropy.io.fits as pf
 import os
 
-import generate_grids as gg
-import gen_avg_per_unb as gapu
+import ARatmospy.generate_grids as gg
+import ARatmospy.gen_avg_per_unb as gapu
 
 path = '/Users/srikar/Data/ARMovies/'
 #path = '/Users/srikar/ssrinath@ucsc.edu/research/wind/GPIsimulator/Residuals'
@@ -44,7 +44,7 @@ freq_dom_scaling = np.sqrt(bign**2/aperture.sum())
 #    for name in files:
 #        if name.startswith(("ugp_")) and name.endswith((".fits")):
 for fname in fitsfiles:
-    print 'Analyzing ', fname
+    print('Analyzing ', fname)
     fn,fe    = os.path.splitext(fname)
     FTfile   = fn+'-FT.dat'
     PSDfile  = fn+'-psd.dat'
@@ -58,18 +58,18 @@ for fname in fitsfiles:
         phx   = phdim[1]
         phy   = phdim[2]
         timesteps = phdim[0]
-        print 'Computing FT'
+        print('Computing FT')
         phFT  = np.memmap(FTfile, dtype=complex, mode='w+', shape=(timesteps,phx,phy))
         for t in np.arange(timesteps):
             wf = hdulist[0].data[t,:,:]
             phFT[t,:,:] = np.fft.fft2(wf) *freq_dom_scaling / (phx*phy)
-        print 'Doing PSD'
+        print('Doing PSD')
         dtpsd = np.memmap(PSDfile, dtype='float64', mode='w+', shape=(perlen,phx,phy))
         for k in np.arange(phx):
             if k % 100 == 0:
-                print k, ' ', 
+                print(k, ' ', )
             for l in np.arange(phy):
                 dtpsd[:,k,l] = gapu.gen_avg_per_unb(phFT[:,k,l], perlen, meanrem=True)
-        print '-----------------'
+        print('-----------------')
 
             

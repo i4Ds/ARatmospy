@@ -117,7 +117,7 @@ def make_ar_atmos(exptime, rate, n, m, alpha_params=None, telescope='GPI', nofro
                               #(1.09	,    32.7	,259,  13300	),
                               (1.08	,    5.7	,320,  16000	)])
 
-        #print cp_params
+        #print(cp_params)
         n_layers  = np.int(cp_params.shape[0])
         alpha_mag = [0.95, 0.99]
         r0s       = cp_params[:,0]              ## r0 in meters

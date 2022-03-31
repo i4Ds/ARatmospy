@@ -1,5 +1,5 @@
 import numpy as np
-import generate_grids as gg
+from . import generate_grids as gg
 
 def create_multilayer_arbase(n, m, pscale, rate, paramcube, alpha_mag,
                              boiling_only=False):

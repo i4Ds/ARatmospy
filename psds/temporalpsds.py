@@ -1,4 +1,4 @@
-import pyfits as pf
+import astropy.io.fits as pf
 import os
 
 import numpy as np
@@ -6,8 +6,8 @@ import matplotlib.pyplot as mp
 #import os.path as op
 
 #import check_ar_atmos as caa
-import generate_grids as gg
-import gen_avg_per_unb as gapu
+import ARatmospy.generate_grids as gg
+import ARatmospy.gen_avg_per_unb as gapu
 
 perlen = 1024.0
 f      = np.arange(perlen)
@@ -302,12 +302,12 @@ while mode is not 'q':
 #ffm = hdu[0].data
 #ffm.shape
 #ffmFT = np.zeros((steps,phx,phy), dtype='complex')
-#print 'FT'
+#print('FT')
 #for t in np.arange(steps):
     #ffmFT[t,:,:] = np.fft.fft2(ffm[t+50,:,:]) *freq_dom_scaling / (phx*phy)
 #    ffmFT[t,:,:] = np.fft.fft2(ffm[t,:,:]) *freq_dom_scaling / (phx*phy)
 #ffmpsd = np.zeros((perlen,phx,phy))
-#print 'PSD'
+#print('PSD')
 #for k in np.arange(phx):
 #    for l in np.arange(phy):
 #        ffmpsd[:,k,l] = gapu.gen_avg_per_unb(ffmFT[:,k,l], perlen, meanrem=True)

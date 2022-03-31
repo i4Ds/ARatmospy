@@ -5,7 +5,7 @@
 import numpy as np
 import numpy.random as ra
 import scipy.fftpack as sf
-import generate_grids as gg
+from . import generate_grids as gg
 
 def get_phase_streamlined(nsub, m, dx, r0, rseed):
     ra.seed(rseed)

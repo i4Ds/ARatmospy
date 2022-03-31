@@ -6,7 +6,7 @@
 
 import numpy as np
 import numpy.random as ra
-from get_phase_streamlined import get_phase_streamlined
+from .get_phase_streamlined import get_phase_streamlined
 
 def get_x_size(xsize0, max_size, ok_sizes, dir='X'):
     if xsize0 < max_size:
@@ -60,7 +60,7 @@ def create_multilayer_phasecube(n, m, pscale, time, paramcube,
     if sizeflag is not None:
         mysize = max(mysize, sizeflag)
 
-    print '********** ', xsize0, ysize0, xsize, ysize, mysize, ' ************'
+    print('********** ', xsize0, ysize0, xsize, ysize, mysize, ' ************')
     effectiven = mysize/m
 
     # now make the phase screens!

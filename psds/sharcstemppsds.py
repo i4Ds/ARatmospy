@@ -1,10 +1,10 @@
 import os
-import pyfits as pf
+import astropy.io.fits as pf
 import numpy  as np
 import matplotlib.pyplot as mp
 
-import generate_grids  as gg
-import gen_avg_per_unb as gapu
+import ARatmospy.generate_grids as gg
+import ARatmospy.gen_avg_per_unb as gapu
 
 perlen = 1024.0
 f      = np.arange(perlen)
@@ -60,7 +60,7 @@ while fmode is not 'q':
     try:
         int(fmode)
     except ValueError:
-        print 'Not a valid number'
+        print('Not a valid number')
         continue
     else:
         fnum = fmode.zfill(4)        
@@ -68,10 +68,10 @@ while fmode is not 'q':
     try:
         fname = [f for f in psdfiles if fnum in f][0] 
     except IndexError:
-        print 'File number out of range'
+        print('File number out of range')
         continue
         
-    print 'Analyzing ', fname
+    print('Analyzing ', fname)
     psd = np.memmap(fname, dtype='float64', mode='r', shape=(perlen,bign,bign))
     #fnum = fname.split('_')[1].split('-')[0]
 

@@ -1,11 +1,11 @@
 import numpy   as np
-import pyfits  as pf
+import astropy.io.fits as pf
 import os.path as op
 import matplotlib.pyplot as mp
 
-import generate_grids as gg
-import gen_avg_per_unb as gapu
-import cdr_create_parameters as ccp
+from . import generate_grids as gg
+from . import gen_avg_per_unb as gapu
+from . import cdr_create_parameters as ccp
 
 def check_ar_atmos(filename, perlen, alpha_mag, rate, n,
                    compare=False, dopsd=False, newfmt=False):
@@ -76,10 +76,10 @@ def check_ar_atmos(filename, perlen, alpha_mag, rate, n,
     # phFT = np.fft.fft2(hdulist[0].data) / (phx*phy) #* freq_dom_scaling 
     for t in np.arange(timesteps):
         phFT[t,:,:] = np.fft.fft2(hdulist[0].data[t,:,:]) / (phx*phy)
-    print 'Done with FT'
+    print('Done with FT')
     
     if dopsd:
-        print 'Doing PSD'
+        print('Doing PSD')
         mft = np.sum(phFT, axis=0)
         
         kx, ky = gg.generate_grids(phx, scalefac=2*np.pi/(bign*pscale), freqshift=True)
@@ -96,7 +96,7 @@ def check_ar_atmos(filename, perlen, alpha_mag, rate, n,
 
         varpsd = np.sum(this_psd, axis=0)
         # Plot spatial PSD
-        #print eff_r0
+        #print(eff_r0)
         mp.clf()
         mp.yscale('log')
         mp.xscale('log')
