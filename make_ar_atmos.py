@@ -65,11 +65,11 @@ def make_ar_atmos(exptime, rate, n, m, alpha_params=None, telescope='GPI', nofro
         else:
             per_len = 2048
 
-    if telescope is 'GPI':
+    if telescope == 'GPI':
         bigD  = 7.77010              ## primary diameter - 7.7 for Gemini, 8.4 for LSST
         bigDs = 1.024                ## inner M2 is 1.024 m for Gemini, 3.0 m for LSST
         nacross = 43.2               ## Gemini 43.2, Shane 16.0
-    elif telescope is 'LSST':
+    elif telescope == 'LSST':
         bigD  = 8.4
         bigDs = 3.0
         nacross = n
