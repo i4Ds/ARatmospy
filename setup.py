@@ -6,7 +6,7 @@ setup(
     description='Autoregressive atmosphere generator',
     author='Srikar Srinath',
     url='https://github.com/SimonP2207/ARatmospy',
-    packages=find_packages(),
+    packages=['ARatmospy'],
     install_requires=[
         'astropy',
         'matplotlib',
