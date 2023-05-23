@@ -4,30 +4,35 @@ import os.path
 
 import matplotlib.pyplot as mp
 import numpy as np
+from numpy.typing import NDArray
 import numpy.random as ra
 import scipy.fftpack as sf
 from astropy.io import fits
+from typing import Optional, Union, Tuple
 
 from .gen_avg_per_unb import gen_avg_per_unb
 from .generate_grids import generate_grids
+from ._types import FloatLike
 
 
 def make_ar_atmos(
-    exptime,
-    rate,
-    n,
-    m,
-    alpha_params=None,
-    telescope="GPI",
-    nofroflo=False,
-    depiston=True,
-    detilt=False,
-    dopsd=False,
-    phmicrons=True,
-    savefile=False,
-    savelayers=False,
-    outdir=".",
-):
+    exptime: FloatLike,
+    rate: FloatLike,
+    n: int,
+    m: int,
+    alpha_params: Optional[NDArray[np.float_]] = None,
+    telescope: str = "GPI",
+    nofroflo: bool = False,
+    depiston: bool = True,
+    detilt: bool = False,
+    dopsd: bool = False,
+    phmicrons: bool = True,
+    savefile: bool = False,
+    savelayers: bool = False,
+    outdir: str = ".",
+) -> Optional[
+    Union[NDArray[np.float64], Tuple[NDArray[np.float64], NDArray[np.float64]]]
+]:
     """
     ####################
      Srikar Srinath - 2015-02-06
@@ -81,9 +86,9 @@ def make_ar_atmos(
 
     if savelayers:
         layerfileroot = arfileroot + "_layer"
-        layeroutfile = os.paht.join(outdir, layerfileroot)
+        layeroutfile = os.path.join(outdir, layerfileroot)
 
-    timesteps = np.int(np.floor(exptime * rate))  ## number of timesteps
+    timesteps = np.int64(np.floor(exptime * rate))  ## number of timesteps
 
     if dopsd:
         if timesteps < 4096:
@@ -111,7 +116,7 @@ def make_ar_atmos(
         nacross = 100.0  # Updated WFS from 2007 is 100x100 lenslets
 
     ## derived quantities
-    bign = np.int(n * m)  ## width of phase screen for aperture
+    bign = np.int64(n * m)  ## width of phase screen for aperture
 
     ## for phase samples
     pscale = bigD / nacross  ## pixel size (m) of samples in pupil plane
@@ -122,7 +127,7 @@ def make_ar_atmos(
     ar = np.sqrt(ax**2 + ay**2)  ## aperture radius
     ap_outer = ar <= bigD / 2
     ap_inner = ar <= bigDs / 2
-    aperture = (ap_outer ^ ap_inner).astype(int)
+    aperture = (ap_outer ^ ap_inner).astype(np.int64)
 
     # create atmosphere parameter array
     if alpha_params is None:
@@ -149,8 +154,8 @@ def make_ar_atmos(
         )
 
         # print(cp_params)
-        n_layers = np.int(cp_params.shape[0])
-        alpha_mag = [0.95, 0.99]
+        n_layers = np.int64(cp_params.shape[0])
+        alpha_mag = np.array([0.95, 0.99])
         r0s = cp_params[:, 0]  ## r0 in meters
         vels = cp_params[:, 1]  ## m/s,  set to 0 to get pure boiling
         dirs = cp_params[:, 2] * np.pi / 180.0  ## in radians
@@ -159,7 +164,7 @@ def make_ar_atmos(
         vx = vels * np.cos(dirs)
         vy = vels * np.sin(dirs)
     else:
-        n_layers = np.int(alpha_params.shape[0])
+        n_layers = np.int64(alpha_params.shape[0])
         alpha_mag = alpha_params[:, 0]
         r0s = alpha_params[:, 1]
         vx = alpha_params[:, 2]
@@ -170,15 +175,15 @@ def make_ar_atmos(
     deltaf = 1.0 / screensize_meters  ## spatial frequency delta
     fx, fy = generate_grids(bign, scalefac=deltaf, freqshift=True)
 
-    phase = np.zeros((bign, bign, n_layers, timesteps), dtype=float)
+    phase = np.zeros((bign, bign, n_layers, timesteps), dtype=np.float64)
     # the method only needs phaseFT from the previous timestep so this is unnecessary if memory
     # constraints exist - just save FT of the phase for the current timestep and update with the new
     # FT instead. This array is useful and saves time for PSD calculations
-    # phFT  = np.zeros((bign,bign,n_layers,timesteps),dtype=complex)  ## array for FT of phase
-    # phrms = np.zeros((timesteps, n_layers),dtype=float)            ## phase rms at each timestep
-    # phvar = np.zeros((timesteps, n_layers),dtype=float)            ## phase variance at each timestep
+    # phFT  = np.zeros((bign,bign,n_layers,timesteps),dtype=np.complex128)  ## array for FT of phase
+    # phrms = np.zeros((timesteps, n_layers),dtype=np.float64)            ## phase rms at each timestep
+    # phvar = np.zeros((timesteps, n_layers),dtype=np.float64)            ## phase variance at each timestep
 
-    for i in np.arange(n_layers, dtype=int):
+    for i in np.arange(n_layers, dtype=np.int64):
         # Set the noise scaling powerlaw - the powerlaw below is from Johansson & Gavel 1994 for a
         # Kolmogorov screen
         powerlaw = (
@@ -206,7 +211,7 @@ def make_ar_atmos(
         noisescalefac = np.sqrt(1 - (np.abs(alpha)) ** 2)
         print("Layer {} alpha created".format(str(i)))
 
-        for t in np.arange(timesteps, dtype=int):
+        for t in np.arange(timesteps, dtype=np.int64):
             # generate noise to be added in, FT it and scale by powerlaw
             noise = np.random.randn(bign, bign)
 
@@ -231,14 +236,14 @@ def make_ar_atmos(
             # impose aperture, depiston, detilt, if desired
 
             if detilt:
-                from .detilt import detilt
+                from .detilt import detilt as detilt_fun
 
-                wf = detilt(wf, aperture)
+                wf = detilt_fun(wf, aperture)
 
             if depiston:
-                from .depiston import depiston
+                from .depiston import depiston as depiston_fun
 
-                wf = depiston(wf, aperture) * aperture
+                wf = depiston_fun(wf, aperture) * aperture
 
             phase[:, :, i, t] = wf
 
@@ -260,7 +265,7 @@ def make_ar_atmos(
 
     if dopsd:
         # Works for m=1 so far, add code to extract apertured part of screen
-        freq_dom_scaling = np.sqrt(np.float(bign) ** 2 / aperture.sum())
+        freq_dom_scaling = np.sqrt(np.float64(bign) ** 2 / aperture.sum())
         scale_for_nm = 1.0e3
         if phmicrons:
             phaseout *= scale_for_nm  # convert phase to nm
@@ -268,19 +273,19 @@ def make_ar_atmos(
             phaseout *= scale_for_nm / (4.0 * np.pi)
 
         if not depiston:
-            from .depiston import depiston
+            from .depiston import depiston as depiston_fun
 
-            phaseout = depiston(phaseout, aperture) * aperture
+            phaseout = depiston_fun(phaseout, aperture) * aperture
 
-        phFT = np.zeros((bign, bign, timesteps), dtype=complex)
+        phFT = np.zeros((bign, bign, timesteps), dtype=np.complex128)
         print("Generating Fourier modes")
-        for t in np.arange(timesteps, dtype=int):
+        for t in np.arange(timesteps, dtype=np.int64):
             phFT[:, :, t] = sf.fft2(phaseout[:, :, t]) * freq_dom_scaling / bign**2
 
-        psd = np.zeros((bign, bign, per_len), dtype=float)
+        psd = np.zeros((bign, bign, per_len), dtype=np.float64)
         print("Generating PSD")
-        for k in np.arange(bign, dtype=int):
-            for l in np.arange(bign, dtype=int):
+        for k in np.arange(bign, dtype=np.int64):
+            for l in np.arange(bign, dtype=np.int64):
                 psd[k, l, :] = gen_avg_per_unb(
                     phFT[k, l, :], per_len, meanrem=True, hanning=True, halfover=True
                 )
@@ -291,7 +296,7 @@ def make_ar_atmos(
         kr = np.sqrt(kx**2 + ky**2)
         f = np.arange(per_len)
         omega = np.roll(
-            (np.arange(per_len, dtype=int) - per_len / 2) * 2 * np.pi / per_len,
+            (np.arange(per_len, dtype=np.int64) - per_len / 2) * 2 * np.pi / per_len,
             per_len / 2,
         )
         hz = omega * rate / (2.0 * np.pi)
@@ -326,3 +331,4 @@ def make_ar_atmos(
             n_layers, n, m, rate, exptime
         )
     )
+    return None

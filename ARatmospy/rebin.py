@@ -1,7 +1,12 @@
 import numpy as np
+from numpy.typing import NDArray
+from typing import Any, Tuple
 
 
-def rebin(a, new_shape):
+def rebin(
+    a: NDArray[Any],
+    new_shape: Tuple[int, ...],
+) -> NDArray[Any]:
     """
     Resizes a 2d array by averaging or repeating elements,
     new dimensions must be integral factors of original dimensions

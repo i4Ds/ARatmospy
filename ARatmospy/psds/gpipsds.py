@@ -63,12 +63,16 @@ for fname in fitsfiles:
         phy = phdim[2]
         timesteps = phdim[0]
         print("Computing FT")
-        phFT = np.memmap(FTfile, dtype=complex, mode="w+", shape=(timesteps, phx, phy))
+        phFT = np.memmap(
+            FTfile, dtype=np.complex128, mode="w+", shape=(timesteps, phx, phy)
+        )
         for t in np.arange(timesteps):
             wf = hdulist[0].data[t, :, :]
             phFT[t, :, :] = np.fft.fft2(wf) * freq_dom_scaling / (phx * phy)
         print("Doing PSD")
-        dtpsd = np.memmap(PSDfile, dtype="float64", mode="w+", shape=(perlen, phx, phy))
+        dtpsd = np.memmap(
+            PSDfile, dtype=np.float64, mode="w+", shape=(perlen, phx, phy)
+        )
         for k in np.arange(phx):
             if k % 100 == 0:
                 print(

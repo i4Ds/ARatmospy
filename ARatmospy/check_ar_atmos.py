@@ -3,15 +3,25 @@ import os.path as op
 import astropy.io.fits as pf
 import matplotlib.pyplot as mp
 import numpy as np
+from numpy.typing import NDArray
 
 from . import cdr_create_parameters as ccp
 from . import gen_avg_per_unb as gapu
 from . import generate_grids as gg
+from ._types import FloatLike
+from typing import cast
 
 
 def check_ar_atmos(
-    filename, perlen, alpha_mag, rate, n, compare=False, dopsd=False, newfmt=False
-):
+    filename: str,
+    perlen: int,
+    alpha_mag: FloatLike,
+    rate: FloatLike,
+    n: int,
+    compare: bool = False,
+    dopsd: bool = False,
+    newfmt: bool = False,
+) -> None:
     # Build in capability for handling FITS files or HDF5 files
     # Add in memmap option once arrays cross 1K
     # add in parallel processing option too
@@ -21,7 +31,7 @@ def check_ar_atmos(
     # Gemini parameters. Change to read from FITS header or HDF5 metadata
     bigD = 7.770  # primary diameter
     bigDs = 1.024  # inner M2 is 1.024 m
-    m = 8.0  # number of samples between actuators - usually 8.0
+    m = 8  # number of samples between actuators - usually 8.0
     # derived quantities
     bign = n * m  # width of phase screen for aperture
     nacross = 43.0  # number of subaps across the pupil - latest GPI design is 43
@@ -34,7 +44,7 @@ def check_ar_atmos(
     ar = np.sqrt(ax**2 + ay**2)  # aperture radius
     ap_outer = ar <= bigD / 2
     ap_inner = ar <= bigDs / 2
-    aperture = ap_outer - ap_inner
+    aperture = cast(NDArray[np.bool_], ap_outer - ap_inner)
     # mp.imshow(aperture)
     # mp.show()
 
@@ -71,7 +81,7 @@ def check_ar_atmos(
     phy = phdim[2]
     timesteps = phdim[0]
 
-    phFT = np.zeros((timesteps, phx, phy), dtype=complex)
+    phFT = np.zeros((timesteps, phx, phy), dtype=np.complex128)
 
     # for t in np.arange(timesteps):
     # by default, the transform is computed over the last two axes
@@ -82,45 +92,46 @@ def check_ar_atmos(
     print("Done with FT")
 
     if dopsd:
-        print("Doing PSD")
-        mft = np.sum(phFT, axis=0)
+        raise NotImplementedError()
+        # print("Doing PSD")
+        # mft = np.sum(phFT, axis=0)
 
-        kx, ky = gg.generate_grids(
-            phx, scalefac=2 * np.pi / (bign * pscale), freqshift=True
-        )
-        kr = np.sqrt(kx**2 + ky**2)
-        f = np.arange(perlen)
-        omega = 2 * np.pi * f / rate
-        # shift array
-        hz = np.roll(f - per_len / 2, np.int(per_len / 2)) / per_len * rate
+        # kx, ky = gg.generate_grids(
+        #     phx, scalefac=2 * np.pi / (bign * pscale), freqshift=True
+        # )
+        # kr = np.sqrt(kx**2 + ky**2)
+        # f = np.arange(perlen)
+        # omega = 2 * np.pi * f / rate
+        # # shift array
+        # hz = np.roll(f - per_len / 2, np.int64(per_len / 2)) / per_len * rate
 
-        this_psd = np.zeros((perlen, phx, phy), dtype=float)
-        for k in np.arange(phx):
-            for l in np.arange(phy):
-                this_psd[:, k, l] = gapu.gen_avg_per_unb(
-                    phFT[:, k, l], perlen, meanrem=True
-                )
+        # this_psd = np.zeros((perlen, phx, phy), dtype=float64)
+        # for k in np.arange(phx):
+        #     for l in np.arange(phy):
+        #         this_psd[:, k, l] = gapu.gen_avg_per_unb(
+        #             phFT[:, k, l], perlen, meanrem=True
+        #         )
 
-        varpsd = np.sum(this_psd, axis=0)
-        # Plot spatial PSD
-        # print(eff_r0)
-        mp.clf()
-        mp.yscale("log")
-        mp.xscale("log")
-        mp.plot(kr, varpsd, "b.")
-        mp.plot(kr, 0.490 * (eff_r0) ** (-5.0 / 3.0) * kr ** (-11.0 / 3.0), "r-")
-        mp.ylim(1e-8, 1e2)
-        mp.xlim(1, 200)
-        mp.grid(True)
-        mp.show()
+        # varpsd = np.sum(this_psd, axis=0)
+        # # Plot spatial PSD
+        # # print(eff_r0)
+        # mp.clf()
+        # mp.yscale("log")
+        # mp.xscale("log")
+        # mp.plot(kr, varpsd, "b.")
+        # mp.plot(kr, 0.490 * (eff_r0) ** (-5.0 / 3.0) * kr ** (-11.0 / 3.0), "r-")
+        # mp.ylim(1e-8, 1e2)
+        # mp.xlim(1, 200)
+        # mp.grid(True)
+        # mp.show()
 
-        k = 4
-        l = 4
-        mp.clf()
-        mp.yscale("log")
-        mp.xlim(-200, 200)
-        mp.plot(hz, this_psd[:, k, l])
-        # 0.490*eff_r0**(-5./3.)*kr[4,4]**(-11./3.)/np.abs(1-alpha_mag*np.exp(-1j*2*np.pi*hz/rate))**2
-        mp.grid(True)
-        mp.show()
+        # k = 4
+        # l = 4
+        # mp.clf()
+        # mp.yscale("log")
+        # mp.xlim(-200, 200)
+        # mp.plot(hz, this_psd[:, k, l])
+        # # 0.490*eff_r0**(-5./3.)*kr[4,4]**(-11./3.)/np.abs(1-alpha_mag*np.exp(-1j*2*np.pi*hz/rate))**2
+        # mp.grid(True)
+        # mp.show()
     return

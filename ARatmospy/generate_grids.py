@@ -1,7 +1,16 @@
 import numpy as np
+from numpy.typing import NDArray
+from typing import Tuple
+
+from ._types import NPFloatLike, NPIntLike
 
 
-def generate_grids(n, scalefac=1.0, whole=False, freqshift=False):
+def generate_grids(
+    n: NPIntLike,
+    scalefac: NPFloatLike = 1.0,
+    whole: bool = False,
+    freqshift: bool = False,
+) -> Tuple[NDArray[np.float64], NDArray[np.float64]]:
     """
     Returns nxn-element x- and y- index grids
     """

@@ -1,11 +1,20 @@
 import numpy as np
+from numpy.typing import NDArray
+from typing import Union, Sequence, Tuple
 
 from . import generate_grids as gg
+from ._types import FloatLike, NDArrayFloatLike
 
 
 def create_multilayer_arbase(
-    n, m, pscale, rate, paramcube, alpha_mag, boiling_only=False
-):
+    n: int,
+    m: int,
+    pscale: FloatLike,
+    rate: FloatLike,
+    paramcube: NDArrayFloatLike,
+    alpha_mag: Union[Sequence[FloatLike], FloatLike],
+    boiling_only: bool = False,
+) -> Tuple[NDArray[np.float64], NDArray[np.complex128]]:
     """
     Function to create the starting phase screen to be used for an
     autoregressive atmosphere model. A powerlaw scales random noise
@@ -67,16 +76,16 @@ def create_multilayer_arbase(
         alpha_phase = -2 * np.pi * (fx * cp_vels_x[i] + fy * cp_vels_y[i]) / rate
         try:
             alpha.append(
-                alpha_mag[i] * (np.cos(alpha_phase) + 1j * np.sin(alpha_phase))
+                alpha_mag[i] * (np.cos(alpha_phase) + 1j * np.sin(alpha_phase))  # type: ignore [index]
             )
         except TypeError:
             # Just have a scalar for alpha_mag
             alpha.append(alpha_mag * (np.cos(alpha_phase) + 1j * np.sin(alpha_phase)))
 
-    powerlaw = np.array(powerlaw)
-    alpha = np.array(alpha)
+    powerlaw_ = np.array(powerlaw)
+    alpha_ = np.array(alpha)
 
-    return powerlaw, alpha
+    return powerlaw_, alpha_
 
 
 if __name__ == "__main__":

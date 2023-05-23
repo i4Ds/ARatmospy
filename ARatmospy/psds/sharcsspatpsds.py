@@ -5,6 +5,7 @@ import matplotlib.pyplot as mp
 import numpy as np
 
 import ARatmospy.gen_avg_per_unb as gapu
+
 # import check_ar_atmos as caa
 import ARatmospy.generate_grids as gg
 
@@ -34,7 +35,7 @@ d = pscale * m
 per_len = perlen
 f = np.arange(per_len)
 
-hz = np.roll(f - per_len / 2, np.int(per_len / 2)) / per_len * rate
+hz = np.roll(f - per_len / 2, np.int64(per_len / 2)) / per_len * rate
 shz = np.sort(hz)
 omega = 2 * np.pi * shz / rate
 ahz = np.argsort(hz)
@@ -57,7 +58,7 @@ for fidx, fname in enumerate(psdfiles):
         break
 
     print("Analyzing ", fname)
-    psd = np.memmap(fname, dtype="float64", mode="r", shape=(perlen, bign, bign))
+    psd = np.memmap(fname, dtype=np.float64, mode="r", shape=(perlen, bign, bign))
     fnum = fname.split("_")[1].split("-")[0]
 
     mp.ion()

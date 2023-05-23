@@ -1,7 +1,13 @@
 import numpy as np
+from numpy.typing import NDArray
+
+from ._types import NPArrayFloatBoolLike
 
 
-def detilt(phase, aperture):
+def detilt(
+    phase: NDArray[np.float_],
+    aperture: NPArrayFloatBoolLike,
+) -> NDArray[np.float_]:
     """
     ;  detilt - remove tilt over an aperture
     ;

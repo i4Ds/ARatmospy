@@ -1,9 +1,17 @@
 import numpy as np
+from numpy.typing import NDArray
 import numpy.random as ra
 import scipy.fftpack as sf
+from typing import Tuple
 
 
-def get_ar_atmos(phaseFT, powerlaw, alpha, nofroflo=False, first=False):
+def get_ar_atmos(
+    phaseFT: NDArray[np.float_],
+    powerlaw: NDArray[np.float_],
+    alpha: NDArray[np.complex_],
+    nofroflo: bool = False,
+    first: bool = False,
+) -> Tuple[NDArray[np.complex128], NDArray[np.float64]]:
     # ;;;;;;;;;;;;;;;;;;;;;
     # ;; Srikar Srinath - 2014-05-07
     # ;; Returns one frame of an n-layer frozen flow atmosphere with boiling

@@ -1,19 +1,27 @@
 import numpy as np
+from numpy.typing import NDArray
+from typing import Optional, List, cast, Tuple, Union
+from ._types import NPComplexLike, FloatLike, NDArrayComplexLike, NDArrayFloatLike
 
 
 def azimuthalAverage(
-    image,
-    center=None,
-    stddev=False,
-    returnradii=False,
-    return_nr=False,
-    binsize=0.5,
-    weights=None,
-    steps=False,
-    interpnan=False,
-    left=None,
-    right=None,
-):
+    image: NDArrayComplexLike,
+    center: Optional[List[FloatLike]] = None,
+    stddev: bool = False,
+    returnradii: bool = False,
+    return_nr: bool = False,
+    binsize: FloatLike = 0.5,
+    weights: Optional[NDArrayFloatLike] = None,
+    steps: bool = False,
+    interpnan: bool = False,
+    left: Optional[NPComplexLike] = None,
+    right: Optional[NPComplexLike] = None,
+) -> Union[
+    Tuple[NDArray[np.float64], NDArray[np.float64]],
+    Tuple[NDArray[np.float64], NDArrayComplexLike],
+    Tuple[NDArray[np.int64], NDArray[np.float64], NDArrayComplexLike],
+    NDArrayComplexLike,
+]:
     """
     Calculate the azimuthally averaged radial profile.
 
@@ -42,10 +50,10 @@ def azimuthalAverage(
 
     """
     # Calculate the indices from the image
-    y, x = np.indices(image.shape)
+    y, x = cast(Tuple[NDArray[np.int64], NDArray[np.int64]], np.indices(image.shape))
 
     if center is None:
-        center = np.array([(x.max() - x.min()) / 2.0, (y.max() - y.min()) / 2.0])
+        center = [(x.max() - x.min()) / 2.0, (y.max() - y.min()) / 2.0]
 
     r = np.hypot(x - center[0], y - center[1])
 
@@ -69,18 +77,18 @@ def azimuthalAverage(
     # there are never any in bin 0, because the lowest index returned by digitize is 1
     nr = np.bincount(whichbin)[1:]
 
-    # recall that bins are from 1 to nbins (which is expressed in array terms by arange(nbins)+1 or xrange(1,nbins+1) )
+    # recall that bins are from 1 to nbins (which is expressed in array terms by arange(nbins)+1 or range(1,nbins+1) )
     # radial_prof.shape = bin_centers.shape
     if stddev:
         radial_prof = np.array(
-            [image.flat[whichbin == b].std() for b in xrange(1, nbins + 1)]
+            [image.flat[whichbin == b].std() for b in range(1, nbins + 1)]
         )
     else:
         radial_prof = np.array(
             [
                 (image * weights).flat[whichbin == b].sum()
                 / weights.flat[whichbin == b].sum()
-                for b in xrange(1, int(nbins) + 1)
+                for b in range(1, int(nbins) + 1)
             ]
         )
 

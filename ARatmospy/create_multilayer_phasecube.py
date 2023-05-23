@@ -6,11 +6,19 @@
 
 import numpy as np
 import numpy.random as ra
+from ._types import NPFloatLike, FloatLike
+from numpy.typing import NDArray, _ArrayLikeFloat_co
+from typing import cast, List, Optional
 
 from .get_phase_streamlined import get_phase_streamlined
 
 
-def get_x_size(xsize0, max_size, ok_sizes, dir="X"):
+def get_x_size(
+    xsize0: NPFloatLike,
+    max_size: NPFloatLike,
+    ok_sizes: NDArray[np.float_],
+    dir: str = "X",
+) -> np.float_:
     if xsize0 < max_size:
         locs = np.where(xsize0 < ok_sizes)
         cnt = len(locs[0])
@@ -22,8 +30,14 @@ def get_x_size(xsize0, max_size, ok_sizes, dir="X"):
 
 
 def create_multilayer_phasecube(
-    n, m, pscale, time, paramcube, random=None, sizeflag=None
-):
+    n: int,
+    m: int,
+    pscale: int,
+    time: FloatLike,
+    paramcube: NDArray[np.float_],
+    random: Optional[_ArrayLikeFloat_co] = None,
+    sizeflag: Optional[FloatLike] = None,
+) -> NDArray[np.float64]:
     bign = n * m
     n_layers = len(paramcube)
 
@@ -45,9 +59,11 @@ def create_multilayer_phasecube(
     ysize0 = np.floor(max(np.abs(pixels_y) + bign) + 1) * 1.0
 
     # these are nice sizes, given FFTW
-    powers_of_2 = np.array([64, 128, 256, 512, 1024, 2048, 4096], dtype=np.float) * 1.0
-    an_extra_3 = 3.0 * np.array([32, 64, 128, 256, 512, 1024, 2048], dtype=np.float)
-    two_extra_3s = 9.0 * np.array([16, 32, 64, 128, 256, 512], dtype=np.float)
+    powers_of_2 = (
+        np.array([64, 128, 256, 512, 1024, 2048, 4096], dtype=np.float64) * 1.0
+    )
+    an_extra_3 = 3.0 * np.array([32, 64, 128, 256, 512, 1024, 2048], dtype=np.float64)
+    two_extra_3s = 9.0 * np.array([16, 32, 64, 128, 256, 512], dtype=np.float64)
 
     ok_sizes0 = np.concatenate([powers_of_2, an_extra_3, two_extra_3s])
     ok_sizes = np.sort(ok_sizes0)
@@ -56,7 +72,7 @@ def create_multilayer_phasecube(
     xsize = get_x_size(xsize0, max_size, ok_sizes)
     ysize = get_x_size(xsize0, max_size, ok_sizes, dir="Y")
 
-    mysize = max([xsize, ysize])
+    mysize = cast(float, max([xsize, ysize]))
     required_minimum_size = bign * 4.0
     if mysize < required_minimum_size:
         mysize = required_minimum_size
@@ -65,16 +81,18 @@ def create_multilayer_phasecube(
         mysize = max(mysize, sizeflag)
 
     print("********** ", xsize0, ysize0, xsize, ysize, mysize, " ************")
-    effectiven = mysize / m
+    effectiven = int(mysize / m)  # changed from orig-code to not get dtype exception
 
     # now make the phase screens!
 
     if random is None:
         random = 104812094812
 
-    phasecube = []
+    phasecube: List[NDArray[np.float64]] = []
     for j in range(n_layers):
-        phasecube.append(get_phase_streamlined(effectiven, m, pscale, r0s[j], random))
+        phasecube.append(
+            get_phase_streamlined(effectiven, m, pscale, r0s[j], random)
+        )
     # Match expected array format in original IDL code:
     # phasecube = make_array(mysize, mysize, n_layers, double=dflag)
     # for j=0, n_layers-1 do begin
@@ -82,9 +100,9 @@ def create_multilayer_phasecube(
     #                                             pscale, r0s[j], rflag, double=dflag, nofftw=nofftwflag)
     # endfor
 
-    phasecube = np.array(phasecube).transpose()
+    phasecube_ = np.array(phasecube).transpose()
 
-    return phasecube
+    return phasecube_
 
 
 if __name__ == "__main__":

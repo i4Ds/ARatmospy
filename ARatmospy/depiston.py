@@ -1,7 +1,12 @@
 import numpy as np
+from numpy.typing import NDArray
+from ._types import NPArrayFloatBoolLike
 
 
-def depiston(phase, aperture=np.zeros(1)):
+def depiston(
+    phase: NDArray[np.float_],
+    aperture: NPArrayFloatBoolLike = np.zeros(1),
+) -> NDArray[np.float_]:
     """
     ;  depiston - remove piston over an aperture
     ;

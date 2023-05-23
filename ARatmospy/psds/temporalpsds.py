@@ -5,6 +5,7 @@ import matplotlib.pyplot as mp
 import numpy as np
 
 import ARatmospy.gen_avg_per_unb as gapu
+
 # import check_ar_atmos as caa
 import ARatmospy.generate_grids as gg
 
@@ -43,20 +44,20 @@ eff_r0 = hdu8k[0].header["r00"]
 bign = n * m  # width of phase screen for aperture
 
 psd8k99 = np.memmap(
-    psd8k[0] + "-psd.dat", dtype="float64", mode="r", shape=(perlen, bign, bign)
+    psd8k[0] + "-psd.dat", dtype=np.float64, mode="r", shape=(perlen, bign, bign)
 )
 psd8k999 = np.memmap(
-    psd8k[1] + "-psd.dat", dtype="float64", mode="r", shape=(perlen, bign, bign)
+    psd8k[1] + "-psd.dat", dtype=np.float64, mode="r", shape=(perlen, bign, bign)
 )
 
 psd8kffhdu = pf.open(psd8k[2] + "-psd.fits", memmap=True, ignore_missing_end=True)
 psd8kff3l = psd8kffhdu[0].data
-# psd8kff3l2  = np.memmap(psd8k[2]+'-psd.dat', dtype='float64', mode='r', shape=(perlen,bign,bign))
+# psd8kff3l2  = np.memmap(psd8k[2]+'-psd.dat', dtype=np.float64, mode='r', shape=(perlen,bign,bign))
 psd8kff1l = np.memmap(
-    psd8k[3] + "-psd.dat", dtype="float64", mode="r", shape=(perlen, bign, bign)
+    psd8k[3] + "-psd.dat", dtype=np.float64, mode="r", shape=(perlen, bign, bign)
 )
 
-hz = np.roll(f - perlen / 2, np.int(perlen / 2)) / perlen * rate
+hz = np.roll(f - perlen / 2, np.int64(perlen / 2)) / perlen * rate
 shz = np.sort(hz)  # sorted array of temporal frequency
 ahz = np.argsort(hz)  # indices of sorted temporal frequency array to use for
 # for putting other arrays in the same order
@@ -151,7 +152,7 @@ pscale = hdu22[0].header["pixscale"]
 # eff_r0    = hdu22[0].header['r00']
 
 bign = n * m  # width of phase screen for aperture
-hz = np.roll(f - perlen / 2, np.int(perlen / 2)) / perlen * rate
+hz = np.roll(f - perlen / 2, np.int64(perlen / 2)) / perlen * rate
 shz = np.sort(hz)  # sorted array of temporal frequency
 ahz = np.argsort(hz)  # indices of sorted temporal frequency array to use for
 # for putting other arrays in the same order
@@ -164,7 +165,7 @@ kr = np.sqrt(kx**2 + ky**2)
 r2m = (0.8 / (2.0 * np.pi)) ** 2  # radians to microns at 0.8 micron wavelength
 
 ffrate = 1500.0
-ffhz = np.roll(f - perlen / 2, np.int(perlen / 2)) / perlen * ffrate
+ffhz = np.roll(f - perlen / 2, np.int64(perlen / 2)) / perlen * ffrate
 ffshz = np.sort(ffhz)  # sorted array of temporal frequency
 ffahz = np.argsort(ffhz)  # indices of sorted temporal frequency array to use for
 # for putting other arrays in the same order
@@ -174,14 +175,14 @@ ffomega = 2 * np.pi * ffshz / ffrate
 
 
 psd99 = np.memmap(
-    psd21ol[0] + "-psd.dat", dtype="float64", mode="r", shape=(perlen, bign, bign)
+    psd21ol[0] + "-psd.dat", dtype=np.float64, mode="r", shape=(perlen, bign, bign)
 )
 psd999 = np.memmap(
-    psd21ol[1] + "-psd.dat", dtype="float64", mode="r", shape=(perlen, bign, bign)
+    psd21ol[1] + "-psd.dat", dtype=np.float64, mode="r", shape=(perlen, bign, bign)
 )
-# psd9999     = np.memmap(psd21ol[2]+'-psd.dat', dtype='float64', mode='r', shape=(perlen,bign,bign))
+# psd9999     = np.memmap(psd21ol[2]+'-psd.dat', dtype=np.float64, mode='r', shape=(perlen,bign,bign))
 psdff = np.memmap(
-    psdffol[0] + "-psd.dat", dtype="float64", mode="r", shape=(perlen, bign, bign)
+    psdffol[0] + "-psd.dat", dtype=np.float64, mode="r", shape=(perlen, bign, bign)
 )
 psdffhdu2 = pf.open(psdffol[0] + "-psd.fits", memmap=True, ignore_missing_end=True)
 psdff2 = psdffhdu2[0].data
@@ -290,22 +291,22 @@ psdgpi = [
 ]
 
 psd99 = np.memmap(
-    psd21cl[0] + "-psd.dat", dtype="float64", mode="r", shape=(perlen, bign, bign)
+    psd21cl[0] + "-psd.dat", dtype=np.float64, mode="r", shape=(perlen, bign, bign)
 )
 psd999 = np.memmap(
-    psd21cl[1] + "-psd.dat", dtype="float64", mode="r", shape=(perlen, bign, bign)
+    psd21cl[1] + "-psd.dat", dtype=np.float64, mode="r", shape=(perlen, bign, bign)
 )
 
 psdff = np.memmap(
     rootdir + psdffcl[0] + "-psd.dat",
-    dtype="float64",
+    dtype=np.float64,
     mode="r",
     shape=(perlen, bign, bign),
 )
 
 if addgpi:
     gpipsd = np.memmap(
-        psdgpi[6] + "-psd.dat", dtype="float64", mode="r", shape=(perlen, bign, bign)
+        psdgpi[6] + "-psd.dat", dtype=np.float64, mode="r", shape=(perlen, bign, bign)
     )
 
 mode = "2,1"
@@ -382,7 +383,7 @@ while mode is not "q":
 # hdu[0].header
 # ffm = hdu[0].data
 # ffm.shape
-# ffmFT = np.zeros((steps,phx,phy), dtype='complex')
+# ffmFT = np.zeros((steps,phx,phy), dtype=np.complex128)
 # print('FT')
 # for t in np.arange(steps):
 # ffmFT[t,:,:] = np.fft.fft2(ffm[t+50,:,:]) *freq_dom_scaling / (phx*phy)
@@ -396,7 +397,7 @@ while mode is not "q":
 # fperlen = 1024.0 #512.0
 # frate   =  2048.0 #1500.0
 # ff      = np.arange(fperlen)
-# fhz     = np.roll(ff-fperlen/2, np.int(fperlen/2))/fperlen*frate
+# fhz     = np.roll(ff-fperlen/2, np.int64(fperlen/2))/fperlen*frate
 # fshz    = np.sort(fhz)         # sorted array of temporal frequency
 # fahz    = np.argsort(fhz)      # indices of sorted temporal frequency array to use for
 # for putting other arrays in the same order

@@ -1,12 +1,15 @@
 import astropy.io.fits as pyfits
 import numpy as np
 import numpy.random as ra
+from numpy.typing import _ArrayLikeFloat_co, NDArray
 import scipy.fftpack as sf
+from typing import Union, Sequence, Optional, Tuple, List, Any
 
 from .create_multilayer_arbase import create_multilayer_arbase
+from ._types import FloatLike, NDArrayFloatLike
 
 
-class ArScreens(object):
+class ArScreens:
     """
     Class to generate atmosphere phase screens using an autoregressive
     process to add stochastic noise to an otherwise frozen flow.
@@ -23,15 +26,24 @@ class ArScreens(object):
                       that is "forgotten" and replaced by Gaussian noise.
     """
 
-    def __init__(self, n, m, pscale, rate, paramcube, alpha_mag, ranseed=None):
+    def __init__(
+        self,
+        n: int,
+        m: int,
+        pscale: FloatLike,
+        rate: FloatLike,
+        paramcube: NDArrayFloatLike,
+        alpha_mag: Union[Sequence[FloatLike], FloatLike],
+        ranseed: Optional[_ArrayLikeFloat_co] = None,
+    ) -> None:
         self.pl, self.alpha = create_multilayer_arbase(
             n, m, pscale, rate, paramcube, alpha_mag
         )
-        self._phaseFT = None
-        self.screens = [[] for x in paramcube]
+        self._phaseFT: Optional[NDArray[np.complex128]] = None
+        self.screens: List[List[NDArray[np.float_]]] = [list() for _ in paramcube]
         ra.seed(ranseed)
 
-    def get_ar_atmos(self):
+    def get_ar_atmos(self) -> Tuple[NDArray[np.complex128], NDArray[np.float64]]:
         shape = self.alpha.shape
         newphFT = []
         newphase = []
@@ -46,7 +58,11 @@ class ArScreens(object):
             newphase.append(sf.ifft2(newphFT[i]).real)
         return np.array(newphFT), np.array(newphase)
 
-    def run(self, nframes, verbose=False):
+    def run(
+        self,
+        nframes: int,
+        verbose: bool = False,
+    ) -> None:
         for j in range(nframes):
             if verbose:
                 print("time step", j)
@@ -54,7 +70,11 @@ class ArScreens(object):
             for i, item in enumerate(screens):
                 self.screens[i].append(item)
 
-    def write(self, outfile, clobber=True):
+    def write(
+        self,
+        outfile: Any,
+        clobber: bool = True,
+    ) -> None:
         output = pyfits.HDUList()
         output.append(pyfits.PrimaryHDU())
         for i, screen in enumerate(self.screens):

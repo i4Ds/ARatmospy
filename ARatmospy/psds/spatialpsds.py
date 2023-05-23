@@ -5,6 +5,7 @@ import matplotlib.pyplot as mp
 import numpy as np
 
 import ARatmospy.gen_avg_per_unb as gapu
+
 # import check_ar_atmos as caa
 import ARatmospy.generate_grids as gg
 
@@ -71,47 +72,47 @@ pscale = bigD / ((nacross) * m)  # pixel size (m) of samples in pupil plane
 d = pscale * m
 
 psd2199 = np.memmap(
-    rootdir + psd21[0] + fext, dtype="float64", mode="r", shape=(perlen, bign, bign)
+    rootdir + psd21[0] + fext, dtype=np.float64, mode="r", shape=(perlen, bign, bign)
 )
 # psd21999  = np.memmap(rootdir+psd21[1]+fext, dtype='float64', mode='r', shape=(perlen,bign,bign))
 # psd219999 = np.memmap(rootdir+psd21[2]+fext, dtype='float64', mode='r', shape=(perlen,bign,bign))
 psd21ol99 = np.memmap(
-    rootdir + psd21ol[0] + fext, dtype="float64", mode="r", shape=(perlen, bign, bign)
+    rootdir + psd21ol[0] + fext, dtype=np.float64, mode="r", shape=(perlen, bign, bign)
 )
 psd21ol999 = np.memmap(
-    rootdir + psd21ol[1] + fext, dtype="float64", mode="r", shape=(perlen, bign, bign)
+    rootdir + psd21ol[1] + fext, dtype=np.float64, mode="r", shape=(perlen, bign, bign)
 )
 psd21ol9999 = np.memmap(
-    rootdir + psd21ol[2] + fext, dtype="float64", mode="r", shape=(perlen, bign, bign)
+    rootdir + psd21ol[2] + fext, dtype=np.float64, mode="r", shape=(perlen, bign, bign)
 )
 
 psd21clo99 = np.memmap(
-    rootdir + psd21clo[0] + fext, dtype="float64", mode="r", shape=(perlen, bign, bign)
+    rootdir + psd21clo[0] + fext, dtype=np.float64, mode="r", shape=(perlen, bign, bign)
 )
 psd21clo999 = np.memmap(
-    rootdir + psd21clo[1] + fext, dtype="float64", mode="r", shape=(perlen, bign, bign)
+    rootdir + psd21clo[1] + fext, dtype=np.float64, mode="r", shape=(perlen, bign, bign)
 )
 # psd21clo9999 = np.memmap(rootdir+psd21clo[2]+fext, dtype='float64', mode='r', shape=(perlen,bign,bign))
 
 psd21clk99 = np.memmap(
-    rootdir + psd21clk[0] + fext, dtype="float64", mode="r", shape=(perlen, bign, bign)
+    rootdir + psd21clk[0] + fext, dtype=np.float64, mode="r", shape=(perlen, bign, bign)
 )
 psd21clk999 = np.memmap(
-    rootdir + psd21clk[1] + fext, dtype="float64", mode="r", shape=(perlen, bign, bign)
+    rootdir + psd21clk[1] + fext, dtype=np.float64, mode="r", shape=(perlen, bign, bign)
 )
-# psd21clk9999 = np.memmap(rootdir+psd21clk[2]+fext, dtype='float64', mode='r', shape=(perlen,bign,bign))
+# psd21clk9999 = np.memmap(rootdir+psd21clk[2]+fext, dtype=np.float64, mode='r', shape=(perlen,bign,bign))
 
-# psdgpi13     = np.memmap(rootdir+psdgpi[0]+fext, dtype='float64', mode='r', shape=(perlen,bign,bign))
-# psdgpi14     = np.memmap(rootdir+psdgpi[1]+fext, dtype='float64', mode='r', shape=(perlen,bign,bign))
+# psdgpi13     = np.memmap(rootdir+psdgpi[0]+fext, dtype=np.float64, mode='r', shape=(perlen,bign,bign))
+# psdgpi14     = np.memmap(rootdir+psdgpi[1]+fext, dtype=np.float64, mode='r', shape=(perlen,bign,bign))
 
 psdff = np.memmap(
-    rootdir + psdfffn[0] + fext, dtype="float64", mode="r", shape=(perlen, 48, 48)
+    rootdir + psdfffn[0] + fext, dtype=np.float64, mode="r", shape=(perlen, 48, 48)
 )
 
 per_len = perlen
 f = np.arange(per_len)
 
-hz = np.roll(f - per_len / 2, np.int(per_len / 2)) / per_len * rate
+hz = np.roll(f - per_len / 2, np.int64(per_len / 2)) / per_len * rate
 shz = np.sort(hz)
 omega = 2 * np.pi * shz / rate
 ahz = np.argsort(hz)
@@ -174,7 +175,7 @@ for file in psdgpi:
     mp.plot(kr, np.sum(psdff, axis=0) * r2m, "mp", markersize=3)
 
     gpipsd = np.memmap(
-        rootdir + file + fext, dtype="float64", mode="r", shape=(perlen, 48, 48)
+        rootdir + file + fext, dtype=np.float64, mode="r", shape=(perlen, 48, 48)
     )
     mp.plot(kr, np.sum(gpipsd, axis=0), "cs", markersize=3)
     # mp.legend(loc='upper right')

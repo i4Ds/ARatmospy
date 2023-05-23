@@ -69,14 +69,14 @@ phx = phdim[1]
 phy = phdim[2]
 timesteps = phdim[0]
 
-# phFT = np.zeros((timesteps,phx,phy), dtype=complex)
+# phFT = np.zeros((timesteps,phx,phy), dtype=np.complex128)
 if FTmmode == "w+":
     print("Creating FT mmap - this will take a while")
 else:
     print("Reading FT dat files")
-phFT = np.memmap(FTfile, dtype=complex, mode=FTmmode, shape=(timesteps, phx, phy))
-phapFT = np.memmap(apFTfile, dtype=complex, mode=FTmmode, shape=(timesteps, phx, phy))
-phdtFT = np.memmap(dtFTfile, dtype=complex, mode=FTmmode, shape=(timesteps, phx, phy))
+phFT = np.memmap(FTfile, dtype=np.complex128, mode=FTmmode, shape=(timesteps, phx, phy))
+phapFT = np.memmap(apFTfile, dtype=np.complex128, mode=FTmmode, shape=(timesteps, phx, phy))
+phdtFT = np.memmap(dtFTfile, dtype=np.complex128, mode=FTmmode, shape=(timesteps, phx, phy))
 # by default, the transform is computed over the last two axes
 # of the input array, i.e., a 2-dimensional FFT
 # phFT = np.fft.fft2(hdulist[0].data) / (phx*phy)
@@ -118,7 +118,7 @@ if FTmmode == "w+":
 per_len = perlen
 f = np.arange(per_len)
 omega = 2 * np.pi * f / rate
-hz = np.roll(f - per_len / 2, np.int(per_len / 2)) / per_len * rate
+hz = np.roll(f - per_len / 2, np.int64(per_len / 2)) / per_len * rate
 kx, ky = gg.generate_grids(phx, scalefac=2 * np.pi / (bign * pscale), freqshift=True)
 kr = np.sqrt(kx**2 + ky**2)
 
@@ -132,10 +132,10 @@ kr = np.sqrt(kx**2 + ky**2)
 # mp.plot(kr, 0.490*(eff_r0)**(-5./3.)*kr**(-11./3.),'r-')
 # mp.show()
 
-# this_psd = np.zeros((perlen, phx, phy),dtype=float)
-this_psd = np.memmap(PSDfile, dtype="float64", mode=PSDmmode, shape=(perlen, phx, phy))
-appsd = np.memmap(apPSDfile, dtype="float64", mode=PSDmmode, shape=(perlen, phx, phy))
-dtpsd = np.memmap(dtPSDfile, dtype="float64", mode=PSDmmode, shape=(perlen, phx, phy))
+# this_psd = np.zeros((perlen, phx, phy),dtype=np.float64)
+this_psd = np.memmap(PSDfile, dtype=np.float64, mode=PSDmmode, shape=(perlen, phx, phy))
+appsd = np.memmap(apPSDfile, dtype=np.float64, mode=PSDmmode, shape=(perlen, phx, phy))
+dtpsd = np.memmap(dtPSDfile, dtype=np.float64, mode=PSDmmode, shape=(perlen, phx, phy))
 if PSDmmode == "w+":
     print("Doing PSD")
     for k in np.arange(phx):

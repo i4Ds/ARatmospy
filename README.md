@@ -52,3 +52,15 @@ _radialprofile_: return an azimuthally averaged radial profile of a 2-D array. U
 of power differences found between AR and frozen flow phase screens
 
 _rebin_: Resizes a 2d array by averaging or repeating elements.
+
+
+##### Fork-Hints:
+This is a forked repository from [SimonP2207/ARatmospy](https://github.com/SimonP2207/ARatmospy) which is also a fork from [shrieks/ARatmospy](https://github.com/shrieks/ARatmospy).
+
+**Changelog:**
+- Replaced `xrange` with `range` for Python3 compatibillity
+- Added type-hints (not `mypy` proof)
+- Adapted deprecated code to get rid of warnings
+- Changed minor semantic code because examples caused an exception
+
+The changes are not tested and therefore hopefully correct. If you have any improvements, just open a PR. There is no time scheduled to make any major changes.

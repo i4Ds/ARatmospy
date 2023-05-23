@@ -4,12 +4,20 @@
 
 import numpy as np
 import numpy.random as ra
+from numpy.typing import _ArrayLikeFloat_co, NDArray
 import scipy.fftpack as sf
+from ._types import NPFloatLike
 
 from . import generate_grids as gg
 
 
-def get_phase_streamlined(nsub, m, dx, r0, rseed):
+def get_phase_streamlined(
+    nsub: int,
+    m: int,
+    dx: int,
+    r0: NPFloatLike,
+    rseed: _ArrayLikeFloat_co,
+) -> NDArray[np.float64]:
     ra.seed(rseed)
     n = m * nsub
     d = dx * m
@@ -33,8 +41,6 @@ def get_phase_streamlined(nsub, m, dx, r0, rseed):
     )
 
     powerlaw[0][0] = 0.0
-    newfx = 0.0
-    newfy = 0.0
 
     noise = ra.normal(size=(n, n))
 

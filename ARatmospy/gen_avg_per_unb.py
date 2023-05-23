@@ -1,16 +1,17 @@
 import numpy as np
+from numpy.typing import NDArray
 import pyfftw as pf
 
 
 def gen_avg_per_unb(
-    closedloop_data,
-    interval_length,
-    halfover=False,
-    meanrem=False,
-    hanning=False,
-    hamming=False,
-    nofftw=False,
-):
+    closedloop_data: NDArray[np.complex_],
+    interval_length: int,
+    halfover: bool = False,
+    meanrem: bool = False,
+    hanning: bool = False,
+    hamming: bool = False,
+    nofftw: bool = False,
+) -> NDArray[np.float64]:
     """
     this uses a blackman window to generate an unbiased (low leakage) periodogram.
 
@@ -31,12 +32,12 @@ def gen_avg_per_unb(
     # check interval length
     if halfover:
         num_intervals = np.floor(total_len / (per_len / 2.0)) - 1
-        start_indices = np.arange(num_intervals, dtype=float) * per_len / 2
+        start_indices = np.arange(num_intervals, dtype=np.float64) * per_len / 2
     else:
         num_intervals = np.floor(total_len / per_len)
-        start_indices = np.arange(num_intervals, dtype=float) * per_len
+        start_indices = np.arange(num_intervals, dtype=np.float64) * per_len
 
-    ind = np.arange(per_len, dtype=float)
+    ind = np.arange(per_len, dtype=np.float64)
 
     # check window requested
     if hanning:

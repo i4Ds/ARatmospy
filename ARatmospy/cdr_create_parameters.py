@@ -1,8 +1,15 @@
 import numpy as np
+from ._types import FloatLike
+from typing import Union
+
+from numpy.typing import NDArray
 
 
 # create CP profile
-def create_compressed_cp_for_cdr(gltype, fatype):
+def create_compressed_cp_for_cdr(
+    gltype: FloatLike,
+    fatype: FloatLike,
+) -> NDArray[np.float64]:
     # the types tell use bad, typical or good for each
     # 0 = bad, 1, = typical, 2 = good
 
@@ -59,7 +66,7 @@ def create_compressed_cp_for_cdr(gltype, fatype):
 
 
 # create parameters
-def cdr_create_parameters(atmtype):
+def cdr_create_parameters(atmtype: int):
     if atmtype == 0:
         cp_params = create_compressed_cp_for_cdr(0, 0)
     else:
