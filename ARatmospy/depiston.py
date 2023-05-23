@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def depiston(phase, aperture=np.zeros(1)):
     """
     ;  depiston - remove piston over an aperture
@@ -14,12 +15,11 @@ def depiston(phase, aperture=np.zeros(1)):
     ;  OUTPUTS:
     ;    phdp - phase with piston removed
     """
-        
-    if len(aperture) == 1: 
+
+    if len(aperture) == 1:
         aperture = np.ones(phase.shape)
-          
-    piston = np.sum(phase*aperture)/aperture.sum()
-    phdp   = aperture*(phase - piston)
+
+    piston = np.sum(phase * aperture) / aperture.sum()
+    phdp = aperture * (phase - piston)
 
     return phdp
-      
