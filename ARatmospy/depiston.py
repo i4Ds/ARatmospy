@@ -1,6 +1,12 @@
 import numpy as np
+from numpy.typing import NDArray
+from ._types import NPArrayFloatBoolLike
 
-def depiston(phase, aperture=np.zeros(1)):
+
+def depiston(
+    phase: NDArray[np.float_],
+    aperture: NPArrayFloatBoolLike = np.zeros(1),
+) -> NDArray[np.float_]:
     """
     ;  depiston - remove piston over an aperture
     ;
@@ -14,12 +20,11 @@ def depiston(phase, aperture=np.zeros(1)):
     ;  OUTPUTS:
     ;    phdp - phase with piston removed
     """
-        
-    if len(aperture) == 1: 
+
+    if len(aperture) == 1:
         aperture = np.ones(phase.shape)
-          
-    piston = np.sum(phase*aperture)/aperture.sum()
-    phdp   = aperture*(phase - piston)
+
+    piston = np.sum(phase * aperture) / aperture.sum()
+    phdp = aperture * (phase - piston)
 
     return phdp
-      

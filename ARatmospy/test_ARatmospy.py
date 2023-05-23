@@ -4,6 +4,7 @@ Used as a limited test of ARatmospy. Code below copied from https://fdulwich.git
 import numpy
 from astropy.io import fits
 from astropy.wcs import WCS
+
 from ARatmospy.ArScreens import ArScreens
 
 screen_width_metres = 200e3
@@ -19,10 +20,9 @@ print("Field of view %.1f (m)" % (num_pix * pscale))
 speed = 150e3 / 3600.0  # 150 km/h in m/s.
 # Parameters for each layer.
 # (scale size [m], speed [m/s], direction [deg], layer height [m]).
-layer_params = numpy.array([(r0, speed, 60.0, 300e3),
-                            (r0, speed/2.0, -30.0, 310e3)])
+layer_params = numpy.array([(r0, speed, 60.0, 300e3), (r0, speed / 2.0, -30.0, 310e3)])
 
-rate = 1.0/60.0  # The inverse frame rate (1 per minute).
+rate = 1.0 / 60.0  # The inverse frame rate (1 per minute).
 alpha_mag = 0.999  # Evolve screen slowly.
 num_times = 240  # Four hours.
 my_screens = ArScreens(n, m, pscale, rate, layer_params, alpha_mag)
@@ -37,11 +37,12 @@ w = WCS(naxis=4)
 w.naxis = 4
 w.wcs.cdelt = [pscale, pscale, 1.0 / rate, 1.0]
 w.wcs.crpix = [num_pix // 2 + 1, num_pix // 2 + 1, num_times // 2 + 1, 1.0]
-w.wcs.ctype = ['XX', 'YY', 'TIME', 'FREQ']
+w.wcs.ctype = ["XX", "YY", "TIME", "FREQ"]
 w.wcs.crval = [0.0, 0.0, 0.0, frequency]
 data = numpy.zeros([1, num_times, num_pix, num_pix])
 for layer in range(len(my_screens.screens)):
     for i, screen in enumerate(my_screens.screens[layer]):
         data[:, i, ...] += phase2tec * screen[numpy.newaxis, ...]
-fits.writeto(filename='test_screen_60s.fits', data=data,
-             header=w.to_header(), overwrite=True)
+fits.writeto(
+    filename="test_screen_60s.fits", data=data, header=w.to_header(), overwrite=True
+)
