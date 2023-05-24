@@ -12,6 +12,6 @@ setup(
         "matplotlib",
         "numpy",
         "pyfftw",
-        "scipy",
+        "scipy>=1.9",
     ],
 )
