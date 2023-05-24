@@ -4,12 +4,12 @@
 #
 # ;; use this to make phasecube for our simulation!
 
-import numpy as np
-import numpy.random as ra
-from ._types import NPFloatLike, FloatLike
-from numpy.typing import NDArray, _ArrayLikeFloat_co
-from typing import cast, List, Optional
+from typing import List, Optional, cast
 
+import numpy as np
+from numpy.typing import NDArray, _ArrayLikeFloat_co
+
+from ._types import FloatLike, NPFloatLike
 from .get_phase_streamlined import get_phase_streamlined
 
 
@@ -90,9 +90,7 @@ def create_multilayer_phasecube(
 
     phasecube: List[NDArray[np.float64]] = []
     for j in range(n_layers):
-        phasecube.append(
-            get_phase_streamlined(effectiven, m, pscale, r0s[j], random)
-        )
+        phasecube.append(get_phase_streamlined(effectiven, m, pscale, r0s[j], random))
     # Match expected array format in original IDL code:
     # phasecube = make_array(mysize, mysize, n_layers, double=dflag)
     # for j=0, n_layers-1 do begin
@@ -106,7 +104,7 @@ def create_multilayer_phasecube(
 
 
 if __name__ == "__main__":
-    import pyfits
+    import astropy.io.fits as pyfits
 
     n = 10
     m = 100
@@ -120,4 +118,4 @@ if __name__ == "__main__":
 
     output = pyfits.HDUList()
     output.append(pyfits.PrimaryHDU(data=phasecube.transpose()))
-    output.writeto("phasecube.fits", clobber=True)
+    output.writeto("phasecube.fits", overwrite=True)

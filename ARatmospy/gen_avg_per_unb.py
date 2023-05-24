@@ -1,6 +1,6 @@
 import numpy as np
-from numpy.typing import NDArray
 import pyfftw as pf
+from numpy.typing import NDArray
 
 
 def gen_avg_per_unb(

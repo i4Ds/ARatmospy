@@ -1,8 +1,9 @@
+from typing import Tuple
+
 import numpy as np
-from numpy.typing import NDArray
 import numpy.random as ra
 import scipy.fftpack as sf
-from typing import Tuple
+from numpy.typing import NDArray
 
 
 def get_ar_atmos(
