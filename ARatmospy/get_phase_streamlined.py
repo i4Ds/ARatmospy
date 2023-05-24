@@ -4,11 +4,11 @@
 
 import numpy as np
 import numpy.random as ra
-from numpy.typing import _ArrayLikeFloat_co, NDArray
 import scipy.fftpack as sf
-from ._types import NPFloatLike
+from numpy.typing import NDArray, _ArrayLikeFloat_co
 
 from . import generate_grids as gg
+from ._types import NPFloatLike
 
 
 def get_phase_streamlined(

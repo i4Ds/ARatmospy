@@ -1,7 +1,9 @@
+from typing import List, Optional, Tuple, Union, cast
+
 import numpy as np
 from numpy.typing import NDArray
-from typing import Optional, List, cast, Tuple, Union
-from ._types import NPComplexLike, FloatLike, NDArrayComplexLike, NDArrayFloatLike
+
+from ._types import FloatLike, NDArrayComplexLike, NDArrayFloatLike, NPComplexLike
 
 
 def azimuthalAverage(

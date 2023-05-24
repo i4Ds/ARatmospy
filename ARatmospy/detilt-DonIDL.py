@@ -1,5 +1,6 @@
 import numpy as np
 from numpy.typing import NDArray
+
 from ._types import NPArrayFloatBoolLike
 
 

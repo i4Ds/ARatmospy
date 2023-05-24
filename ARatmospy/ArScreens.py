@@ -1,12 +1,13 @@
+from typing import List, Optional, Sequence, Tuple, Union
+
 import astropy.io.fits as pyfits
 import numpy as np
 import numpy.random as ra
-from numpy.typing import _ArrayLikeFloat_co, NDArray
 import scipy.fftpack as sf
-from typing import Union, Sequence, Optional, Tuple, List, Any
+from numpy.typing import NDArray, _ArrayLikeFloat_co
 
-from .create_multilayer_arbase import create_multilayer_arbase
 from ._types import FloatLike, NDArrayFloatLike
+from .create_multilayer_arbase import create_multilayer_arbase
 
 
 class ArScreens:
@@ -72,15 +73,15 @@ class ArScreens:
 
     def write(
         self,
-        outfile: Any,
-        clobber: bool = True,
+        outfile: str,
+        overwrite: bool = True,
     ) -> None:
         output = pyfits.HDUList()
         output.append(pyfits.PrimaryHDU())
         for i, screen in enumerate(self.screens):
             output.append(pyfits.ImageHDU(np.array(screen)))
             output[-1].name = "Layer %i" % i
-        output.writeto(outfile, clobber=clobber)
+        output.writeto(outfile, overwrite=overwrite)
 
 
 if __name__ == "__main__":

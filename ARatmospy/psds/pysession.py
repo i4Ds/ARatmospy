@@ -75,8 +75,12 @@ if FTmmode == "w+":
 else:
     print("Reading FT dat files")
 phFT = np.memmap(FTfile, dtype=np.complex128, mode=FTmmode, shape=(timesteps, phx, phy))
-phapFT = np.memmap(apFTfile, dtype=np.complex128, mode=FTmmode, shape=(timesteps, phx, phy))
-phdtFT = np.memmap(dtFTfile, dtype=np.complex128, mode=FTmmode, shape=(timesteps, phx, phy))
+phapFT = np.memmap(
+    apFTfile, dtype=np.complex128, mode=FTmmode, shape=(timesteps, phx, phy)
+)
+phdtFT = np.memmap(
+    dtFTfile, dtype=np.complex128, mode=FTmmode, shape=(timesteps, phx, phy)
+)
 # by default, the transform is computed over the last two axes
 # of the input array, i.e., a 2-dimensional FFT
 # phFT = np.fft.fft2(hdulist[0].data) / (phx*phy)

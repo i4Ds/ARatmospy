@@ -1,8 +1,7 @@
 import numpy as np
-from ._types import FloatLike
-from typing import Union
-
 from numpy.typing import NDArray
+
+from ._types import FloatLike
 
 
 # create CP profile
@@ -66,7 +65,7 @@ def create_compressed_cp_for_cdr(
 
 
 # create parameters
-def cdr_create_parameters(atmtype: int):
+def cdr_create_parameters(atmtype: int) -> NDArray[np.float64]:
     if atmtype == 0:
         cp_params = create_compressed_cp_for_cdr(0, 0)
     else:

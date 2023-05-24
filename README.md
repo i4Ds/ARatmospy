@@ -57,10 +57,10 @@ _rebin_: Resizes a 2d array by averaging or repeating elements.
 ##### Fork-Hints:
 This is a forked repository from [SimonP2207/ARatmospy](https://github.com/SimonP2207/ARatmospy) which is also a fork from [shrieks/ARatmospy](https://github.com/shrieks/ARatmospy).
 
-**Changelog:**
+*Changelog:*
 - Replaced `xrange` with `range` for Python3 compatibillity
 - Added type-hints (not `mypy` proof)
 - Adapted deprecated code to get rid of warnings
-- Changed minor semantic code because examples caused an exception
+- Minor code changes when examples caused an error
 
-The changes are not tested and therefore hopefully correct. If you have any improvements, just open a PR. There is no time scheduled to make any major changes.
+The changes are not properly tested and therefore the code is hopefully correct. If you have any improvements, just open a PR.

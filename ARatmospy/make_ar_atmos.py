@@ -1,18 +1,19 @@
 import datetime
 import os
 import os.path
+from typing import Optional, Tuple, Union
 
 import matplotlib.pyplot as mp
 import numpy as np
-from numpy.typing import NDArray
-import numpy.random as ra
+
+# import numpy.random as ra
 import scipy.fftpack as sf
 from astropy.io import fits
-from typing import Optional, Union, Tuple
+from numpy.typing import NDArray
 
+from ._types import FloatLike
 from .gen_avg_per_unb import gen_avg_per_unb
 from .generate_grids import generate_grids
-from ._types import FloatLike
 
 
 def make_ar_atmos(

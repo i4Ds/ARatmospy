@@ -1,6 +1,7 @@
+from typing import Sequence, Tuple, Union
+
 import numpy as np
 from numpy.typing import NDArray
-from typing import Union, Sequence, Tuple
 
 from . import generate_grids as gg
 from ._types import FloatLike, NDArrayFloatLike
@@ -90,7 +91,7 @@ def create_multilayer_arbase(
 
 if __name__ == "__main__":
     #    np.seterr(all='raise')
-    import pyfits
+    import astropy.io.fits as pyfits
 
     n = 10
     m = 100
@@ -102,8 +103,8 @@ if __name__ == "__main__":
 
     pl_output = pyfits.HDUList()
     pl_output.append(pyfits.PrimaryHDU(data=powerlaw.transpose()))
-    pl_output.writeto("powerlaw.fits", clobber=True)
+    pl_output.writeto("powerlaw.fits", overwrite=True)
 
     alpha_output = pyfits.HDUList()
     alpha_output.append(pyfits.PrimaryHDU(data=alpha.real))
-    alpha_output.writeto("alpha.fits", clobber=True)
+    alpha_output.writeto("alpha.fits", overwrite=True)

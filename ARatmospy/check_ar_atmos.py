@@ -1,15 +1,15 @@
-import os.path as op
+from typing import cast
 
 import astropy.io.fits as pf
-import matplotlib.pyplot as mp
+
+# import matplotlib.pyplot as mp
 import numpy as np
 from numpy.typing import NDArray
 
+# from . import gen_avg_per_unb as gapu
 from . import cdr_create_parameters as ccp
-from . import gen_avg_per_unb as gapu
 from . import generate_grids as gg
 from ._types import FloatLike
-from typing import cast
 
 
 def check_ar_atmos(
