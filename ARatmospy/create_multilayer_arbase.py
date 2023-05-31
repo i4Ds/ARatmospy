@@ -5,6 +5,7 @@ from numpy.typing import NDArray
 
 from . import generate_grids as gg
 from ._types import FloatLike, NDArrayFloatLike
+from .utils import NumpyHandleError
 
 
 def create_multilayer_arbase(
@@ -65,7 +66,8 @@ def create_multilayer_arbase(
             * np.sqrt(0.00058)
             * (cp_r0s[i] ** (-5.0 / 6.0))
         )
-        factor2 = (fx * fx + fy * fy) ** (-11.0 / 12.0)
+        with NumpyHandleError(divide="ignore"):  # ignores zero div caused by neg-power
+            factor2 = (fx * fx + fy * fy) ** (-11.0 / 12.0)
         factor3 = bign * np.sqrt(np.sqrt(2.0))
         powerlaw.append(factor1 * factor2 * factor3)
         powerlaw[-1][0][0] = 0.0

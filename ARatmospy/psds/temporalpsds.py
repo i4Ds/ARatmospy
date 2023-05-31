@@ -5,7 +5,6 @@ import matplotlib.pyplot as mp
 import numpy as np
 
 import ARatmospy.gen_avg_per_unb as gapu
-
 # import check_ar_atmos as caa
 import ARatmospy.generate_grids as gg
 
