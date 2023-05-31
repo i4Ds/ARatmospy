@@ -5,7 +5,6 @@ from typing import Optional, Tuple, Union
 
 import matplotlib.pyplot as mp
 import numpy as np
-
 # import numpy.random as ra
 import scipy.fftpack as sf
 from astropy.io import fits

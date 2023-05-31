@@ -1,7 +1,6 @@
 from typing import cast
 
 import astropy.io.fits as pf
-
 # import matplotlib.pyplot as mp
 import numpy as np
 from numpy.typing import NDArray
