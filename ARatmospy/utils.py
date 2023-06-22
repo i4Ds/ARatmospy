@@ -21,7 +21,7 @@ class NumpyHandleError:
         self.under = under
         self.invalid = invalid
 
-    def __enter__(self):
+    def __enter__(self) -> None:
         self.old_settings = np.seterr(
             all=self.all,
             divide=self.divide,
