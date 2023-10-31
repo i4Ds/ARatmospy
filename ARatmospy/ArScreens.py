@@ -4,7 +4,7 @@ import astropy.io.fits as pyfits
 import numpy as np
 import numpy.random as ra
 import scipy.fftpack as sf
-from numpy.typing import NDArray, _ArrayLikeFloat_co
+from numpy.typing import NDArray
 
 from ._types import FloatLike, NDArrayFloatLike
 from .create_multilayer_arbase import create_multilayer_arbase
@@ -35,7 +35,7 @@ class ArScreens:
         rate: FloatLike,
         paramcube: NDArrayFloatLike,
         alpha_mag: Union[Sequence[FloatLike], FloatLike],
-        ranseed: Optional[_ArrayLikeFloat_co] = None,
+        ranseed: Optional[int] = None,
     ) -> None:
         self.pl, self.alpha = create_multilayer_arbase(
             n, m, pscale, rate, paramcube, alpha_mag

@@ -5,7 +5,7 @@
 import numpy as np
 import numpy.random as ra
 import scipy.fftpack as sf
-from numpy.typing import NDArray, _ArrayLikeFloat_co
+from numpy.typing import NDArray
 
 from . import generate_grids as gg
 from ._types import NPFloatLike
@@ -16,7 +16,7 @@ def get_phase_streamlined(
     m: int,
     dx: int,
     r0: NPFloatLike,
-    rseed: _ArrayLikeFloat_co,
+    rseed: int,
 ) -> NDArray[np.float64]:
     ra.seed(rseed)
     n = m * nsub
