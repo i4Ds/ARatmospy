@@ -7,7 +7,7 @@
 from typing import List, Optional, cast
 
 import numpy as np
-from numpy.typing import NDArray, _ArrayLikeFloat_co
+from numpy.typing import NDArray
 
 from ._types import FloatLike, NPFloatLike
 from .get_phase_streamlined import get_phase_streamlined
@@ -35,7 +35,7 @@ def create_multilayer_phasecube(
     pscale: int,
     time: FloatLike,
     paramcube: NDArray[np.float_],
-    random: Optional[_ArrayLikeFloat_co] = None,
+    random: Optional[int] = None,
     sizeflag: Optional[FloatLike] = None,
 ) -> NDArray[np.float64]:
     bign = n * m
