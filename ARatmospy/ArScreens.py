@@ -41,7 +41,7 @@ class ArScreens:
             n, m, pscale, rate, paramcube, alpha_mag
         )
         self._phaseFT: Optional[NDArray[np.complex128]] = None
-        self.screens: List[List[NDArray[np.float_]]] = [list() for _ in paramcube]
+        self.screens: List[List[NDArray[np.float64]]] = [list() for _ in paramcube]
         ra.seed(ranseed)
 
     def get_ar_atmos(self) -> Tuple[NDArray[np.complex128], NDArray[np.float64]]:

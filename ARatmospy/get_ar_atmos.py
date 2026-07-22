@@ -7,9 +7,9 @@ from numpy.typing import NDArray
 
 
 def get_ar_atmos(
-    phaseFT: NDArray[np.float_],
-    powerlaw: NDArray[np.float_],
-    alpha: NDArray[np.complex_],
+    phaseFT: NDArray[np.float64],
+    powerlaw: NDArray[np.float64],
+    alpha: NDArray[np.complex128],
     nofroflo: bool = False,
     first: bool = False,
 ) -> Tuple[NDArray[np.complex128], NDArray[np.float64]]:

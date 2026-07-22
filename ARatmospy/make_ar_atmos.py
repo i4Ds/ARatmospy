@@ -20,7 +20,7 @@ def make_ar_atmos(
     rate: FloatLike,
     n: int,
     m: int,
-    alpha_params: Optional[NDArray[np.float_]] = None,
+    alpha_params: Optional[NDArray[np.float64]] = None,
     telescope: str = "GPI",
     nofroflo: bool = False,
     depiston: bool = True,

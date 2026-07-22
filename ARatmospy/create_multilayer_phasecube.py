@@ -16,9 +16,9 @@ from .get_phase_streamlined import get_phase_streamlined
 def get_x_size(
     xsize0: NPFloatLike,
     max_size: NPFloatLike,
-    ok_sizes: NDArray[np.float_],
+    ok_sizes: NDArray[np.float64],
     dir: str = "X",
-) -> np.float_:
+) -> np.float64:
     if xsize0 < max_size:
         locs = np.where(xsize0 < ok_sizes)
         cnt = len(locs[0])
@@ -34,7 +34,7 @@ def create_multilayer_phasecube(
     m: int,
     pscale: int,
     time: FloatLike,
-    paramcube: NDArray[np.float_],
+    paramcube: NDArray[np.float64],
     random: Optional[int] = None,
     sizeflag: Optional[FloatLike] = None,
 ) -> NDArray[np.float64]:
