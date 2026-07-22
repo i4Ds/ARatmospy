@@ -5,9 +5,9 @@ from ._types import NPArrayFloatBoolLike
 
 
 def detilt(
-    phase: NDArray[np.float_],
+    phase: NDArray[np.float64],
     aperture: NPArrayFloatBoolLike,
-) -> NDArray[np.float_]:
+) -> NDArray[np.float64]:
     """
     ;  detilt - remove tilt over an aperture
     ;
