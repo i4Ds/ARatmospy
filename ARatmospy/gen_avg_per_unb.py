@@ -4,7 +4,7 @@ from numpy.typing import NDArray
 
 
 def gen_avg_per_unb(
-    closedloop_data: NDArray[np.complex_],
+    closedloop_data: NDArray[np.complex128],
     interval_length: int,
     halfover: bool = False,
     meanrem: bool = False,
